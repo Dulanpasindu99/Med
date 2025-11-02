@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* iOS-like glass background helper */
+.glass {
+  @apply bg-white/50 backdrop-blur-md border border-white/40 shadow-soft rounded-2xl;
+}
