@@ -8,6 +8,7 @@ datasource db {
 }
 
 model Dispensary {
+<<<<<<< HEAD
   id        String                     @id @default(cuid())
   name      String
   address   String?
@@ -34,6 +35,33 @@ model UserDispensaryMembership {
   userId       String
   dispensary   Dispensary @relation(fields: [dispensaryId], references: [id])
   dispensaryId String
+=======
+  id          String    @id @default(cuid())
+  name        String
+  address     String?
+  patients    Patient[]
+  users       UserDispensaryMembership[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String?
+  role        Role
+  memberships UserDispensaryMembership[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model UserDispensaryMembership {
+  id            String     @id @default(cuid())
+  user          User       @relation(fields: [userId], references: [id])
+  userId        String
+  dispensary    Dispensary @relation(fields: [dispensaryId], references: [id])
+  dispensaryId  String
+>>>>>>> 4bef03dc3e944c482cafefa0eed84162fe5e2a34
 }
 
 enum Role {
@@ -51,6 +79,7 @@ model Family {
 }
 
 model Patient {
+<<<<<<< HEAD
   id           String     @id @default(cuid())
   nic          String     @unique
   firstName    String
@@ -69,12 +98,33 @@ model Patient {
   allergies    Allergy[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+=======
+  id            String     @id @default(cuid())
+  nic           String     @unique
+  firstName     String
+  lastName      String?
+  sex           String?
+  dob           DateTime?
+  phone         String?
+  address       String?
+  bloodGroup    String?
+  notes         String?
+  family        Family?    @relation(fields: [familyId], references: [id])
+  familyId      String?
+  dispensary    Dispensary @relation(fields: [dispensaryId], references: [id])
+  dispensaryId  String
+  visits        Visit[]
+  allergies     Allergy[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+>>>>>>> 4bef03dc3e944c482cafefa0eed84162fe5e2a34
 
   @@index([dispensaryId, nic])
   @@index([dispensaryId, firstName, lastName])
 }
 
 model Visit {
+<<<<<<< HEAD
   id            String         @id @default(cuid())
   patient       Patient        @relation(fields: [patientId], references: [id])
   patientId     String
@@ -105,6 +155,38 @@ model Prescription {
   type    PrescriptionType
   note    String?
   items   PrescriptionItem[]
+=======
+  id           String    @id @default(cuid())
+  patient      Patient   @relation(fields: [patientId], references: [id])
+  patientId    String
+  doctor       User      @relation(fields: [doctorId], references: [id])
+  doctorId     String
+  visitTime    DateTime  @default(now())
+  reason       String?
+  vitalsJson   Json?
+  nextVisit    DateTime?
+  notes        String?
+  diagnoses    Diagnosis[]
+  prescriptions Prescription[]
+  tests        Test[]
+}
+
+model Diagnosis {
+  id       String  @id @default(cuid())
+  visit    Visit   @relation(fields: [visitId], references: [id])
+  visitId  String
+  text     String
+  icd10    String?
+}
+
+model Prescription {
+  id       String  @id @default(cuid())
+  visit    Visit   @relation(fields: [visitId], references: [id])
+  visitId  String
+  type     PrescriptionType
+  note     String?
+  items    PrescriptionItem[]
+>>>>>>> 4bef03dc3e944c482cafefa0eed84162fe5e2a34
 }
 
 enum PrescriptionType {
@@ -114,6 +196,7 @@ enum PrescriptionType {
 }
 
 model PrescriptionItem {
+<<<<<<< HEAD
   id             String       @id @default(cuid())
   prescription   Prescription @relation(fields: [prescriptionId], references: [id])
   prescriptionId String
@@ -141,4 +224,33 @@ model Test {
   testName String
   result   String?
   fileUrl  String?
+=======
+  id              String        @id @default(cuid())
+  prescription    Prescription  @relation(fields: [prescriptionId], references: [id])
+  prescriptionId  String
+  drugName        String
+  dose            Float?
+  doseUnit        String?
+  terms           String?
+  amount          Int?
+  frequency       String?
+  duration        String?
+}
+
+model Allergy {
+  id         String  @id @default(cuid())
+  patient    Patient @relation(fields: [patientId], references: [id])
+  patientId  String
+  name       String
+  severity   String?
+}
+
+model Test {
+  id        String  @id @default(cuid())
+  visit     Visit   @relation(fields: [visitId], references: [id])
+  visitId   String
+  testName  String
+  result    String?
+  fileUrl   String?
+>>>>>>> 4bef03dc3e944c482cafefa0eed84162fe5e2a34
 }
