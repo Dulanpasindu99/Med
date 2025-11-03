@@ -1,17 +1,188 @@
 /* app/globals.css */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+
+/* Base text color is dark slate */
+body { color: #0f172a; }
+
+/* Selection */
+::selection { background: rgba(56, 189, 248, 0.3); }
+
+/* ---------- Animated background for liquid-glass ---------- */
+.bg-animated{
+  background:
+    radial-gradient(circle at 20% 20%, #cde6ff 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, #d0f0ff 0%, transparent 60%),
+    radial-gradient(circle at 60% 30%, #f0faff 0%, transparent 60%),
+    linear-gradient(135deg, #cbe4ff 0%, #e3f0ff 100%);
+  background-size: 200% 200%;
+  animation: moveGradient 14s ease-in-out infinite;
+}
+@keyframes moveGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-body {
-  font-family: system-ui, sans-serif;
-  background-color: #f8f9fb;
-  color: #222;
+/* ---------- iOS frosted-glass utilities ---------- */
+/* Frosted glass */
+.glass-pro {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.4s ease;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.bg-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.bg-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.6) 50%,
+    transparent 100%
+  );
+  animation: shimmer 6s infinite;
+}
+@keyframes shimmer {
+  0% { left: -150%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+
+.hover-zoom {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hover-zoom:hover {
+  transform: scale(1.02);
+}
+
+.page-fade {
+  animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+/* subtle text light */
+.text-glow {
+  text-shadow: 0 1px 12px rgba(56, 189, 248, 0.25);
+}
+
+/* card/button hover scale */
+.hover-zoom { transition: transform .2s ease, box-shadow .2s ease; }
+.hover-zoom:hover { transform: translateY(-2px) scale(1.01); }
+
+/* glowing button hover */
+.glow-hover { transition: box-shadow .25s ease, transform .25s ease; }
+.glow-hover:hover {
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+/* soft fade-in for sections */
+@keyframes fadeIn { from{opacity:0; transform: translateY(8px)} to{opacity:1; transform:translateY(0)} }
+.page-fade, .animate-fadeIn { animation: fadeIn .35s ease-out; }
+
+/* small toast-in (if you use react-hot-toast later) */
+@keyframes toast-in { 0%{transform:translateY(-8px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+.react-hot-toast { animation: toast-in .25s ease-out; }
+
+/* keep anchor default clean */
+a { color: inherit; text-decoration: none; }
+
+/* Sidebar slide nicety if you animate it later */
+.sidebar-transition { transition: all 0.3s ease-in-out; }
+
+/* Apple-style depth layers */
+.glass-float {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+  transition: all 0.3s ease;
+}
+
+.glass-float:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 70px rgba(56, 189, 248, 0.25);
+}
+
+/* Light gradient shimmer moving behind all cards */
+.bg-shimmer {
+  background: linear-gradient(
+    120deg,
+    rgba(173, 216, 255, 0.25),
+    rgba(255, 255, 255, 0.25),
+    rgba(200, 230, 255, 0.3)
+  );
+  background-size: 200% 200%;
+  animation: shimmerMove 8s ease-in-out infinite;
+}
+
+@keyframes shimmerMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+animation: shimmerMove 12s ease-in-out infinite;
+
+.bg-shimmer {
+  background: linear-gradient(
+    120deg,
+    rgba(173, 216, 255, 0.25),
+    rgba(255, 255, 255, 0.25),
+    rgba(200, 230, 255, 0.3)
+  ) !important;
+  background-size: 200% 200% !important;
+  animation: shimmerMove 8s ease-in-out infinite !important;
+}
+
+@keyframes shimmerMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

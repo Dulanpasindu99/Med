@@ -1,8 +1,7 @@
 {
-  "/patients/[id]/page": "app/patients/[id]/page.js",
-  "/visits/[id]/page": "app/visits/[id]/page.js",
   "/page": "app/page.js",
   "/api/patients/route": "app/api/patients/route.js",
-  "/patients/page": "app/patients/page.js",
-  "/patients/new/page": "app/patients/new/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/patients/[id]/page": "app/patients/[id]/page.js",
+  "/patients/[id]/new-visit/page": "app/patients/[id]/new-visit/page.js"
 }

@@ -1,12 +1,25 @@
-generator client {
-  provider = "prisma-client-js"
+// ---------- USER & ACCESS MODELS ----------
+model User {
+  id          String                     @id @default(cuid())
+  name        String
+  email       String                     @unique
+  password    String
+  role        Role                       @default(DOCTOR)
+  memberships UserDispensaryMembership[]
+  visits      Visit[]                    @relation("UserToVisit")
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model UserDispensaryMembership {
+  id           String      @id @default(cuid())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  dispensary   Dispensary? @relation(fields: [dispensaryId], references: [id])
+  dispensaryId String?
 }
 
+// ---------- DISPENSARY ----------
 model Dispensary {
   id        String                     @id @default(cuid())
   name      String
@@ -17,32 +30,7 @@ model Dispensary {
   updatedAt DateTime                   @updatedAt
 }
 
-model User {
-  id          String                     @id @default(cuid())
-  email       String                     @unique
-  name        String?
-  role        Role
-  memberships UserDispensaryMembership[]
-  createdAt   DateTime                   @default(now())
-  updatedAt   DateTime                   @updatedAt
-  visits      Visit[]                    @relation("UserToVisit")
-}
-
-model UserDispensaryMembership {
-  id           String     @id @default(cuid())
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String
-  dispensary   Dispensary? @relation(fields: [dispensaryId], references: [id])
-dispensaryId String?
-
-}
-
-enum Role {
-  ADMIN
-  DOCTOR
-  ASSISTANT
-}
-
+// ---------- FAMILY ----------
 model Family {
   id        String    @id @default(cuid())
   title     String
@@ -51,9 +39,10 @@ model Family {
   updatedAt DateTime  @updatedAt
 }
 
+// ---------- PATIENT ----------
 model Patient {
-  id           String     @id @default(cuid())
-  nic          String     @unique
+  id           String      @id @default(cuid())
+  nic          String      @unique
   firstName    String
   lastName     String?
   sex          String?
@@ -62,20 +51,20 @@ model Patient {
   address      String?
   bloodGroup   String?
   notes        String?
-  family       Family?    @relation(fields: [familyId], references: [id])
+  family       Family?     @relation(fields: [familyId], references: [id])
   familyId     String?
   dispensary   Dispensary? @relation(fields: [dispensaryId], references: [id])
-dispensaryId String?
-
+  dispensaryId String?
   visits       Visit[]
   allergies    Allergy[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   @@index([dispensaryId, nic])
   @@index([dispensaryId, firstName, lastName])
 }
 
+// ---------- VISIT ----------
 model Visit {
   id            String         @id @default(cuid())
   patient       Patient        @relation(fields: [patientId], references: [id])
@@ -92,6 +81,7 @@ model Visit {
   tests         Test[]
 }
 
+// ---------- DIAGNOSIS ----------
 model Diagnosis {
   id      String  @id @default(cuid())
   visit   Visit   @relation(fields: [visitId], references: [id])
@@ -100,6 +90,7 @@ model Diagnosis {
   icd10   String?
 }
 
+// ---------- PRESCRIPTION ----------
 model Prescription {
   id      String             @id @default(cuid())
   visit   Visit              @relation(fields: [visitId], references: [id])
@@ -109,6 +100,7 @@ model Prescription {
   items   PrescriptionItem[]
 }
 
+// ---------- PRESCRIPTION ITEM ----------
 model PrescriptionItem {
   id             String        @id @default(cuid())
   fileUrl        String?
@@ -116,12 +108,7 @@ model PrescriptionItem {
   prescriptionId String?
 }
 
-enum PrescriptionType {
-  CLINICAL
-  OUTSIDE
-  REGULAR
-}
-
+// ---------- TEST ----------
 model Test {
   id      String  @id @default(cuid())
   name    String
@@ -130,10 +117,34 @@ model Test {
   visitId String
 }
 
+// ---------- ALLERGY ----------
 model Allergy {
   id          String  @id @default(cuid())
   name        String
   description String?
   patient     Patient @relation(fields: [patientId], references: [id])
   patientId   String
+}
+
+// ---------- ENUMS ----------
+enum Role {
+  ADMIN
+  DOCTOR
+  ASSISTANT
+}
+
+enum PrescriptionType {
+  CLINICAL
+  OUTSIDE
+  REGULAR
+}
+
+// ---------- GENERATOR & DATASOURCE ----------
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
