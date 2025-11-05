@@ -148,7 +148,7 @@ export default function DoctorDashboard() {
   }, [patients]);
 
   return (
-    <div className="page-fade mx-auto flex w-full max-w-7xl flex-col gap-8 font-[\"SF Pro Display\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif] text-slate-900 lg:flex-row">
+    <div className="page-fade mx-auto flex w-full max-w-7xl flex-col gap-8 font-sf-pro text-slate-900 lg:flex-row">
       <aside className="glass-float bg-shimmer flex w-full flex-col justify-between gap-10 rounded-[2rem] p-6 lg:max-w-[18rem]">
         <div className="space-y-8">
           <div>
